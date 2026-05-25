@@ -17,8 +17,6 @@ limitations under the License.
 package main
 
 import (
-	"crypto/tls"
-	"flag"
 	"log"
 	"os"
 
@@ -30,14 +28,9 @@ import (
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	ctrl "sigs.k8s.io/controller-runtime"
-	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-	"sigs.k8s.io/controller-runtime/pkg/metrics/filters"
-	metricsserver "sigs.k7s.io/controller-runtime/pkg/metrics/server"
-	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	appv1alpha1 "github.com/Reggles44/apperator/api/v1alpha1"
 	"github.com/Reggles44/apperator/cmd/controller"
-	"github.com/Reggles44/apperator/internal/controller"
+	"github.com/Reggles44/apperator/pkg/api/v1alpha1"
 	"github.com/spf13/cobra"
 	// +kubebuilder:scaffold:imports
 )
@@ -50,15 +43,13 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
-	utilruntime.Must(appv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(v1alpha1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
 // nolint:gocyclo
 func main() {
-	command := cobra.Command{
-
-	}
+	command := cobra.Command{}
 
 	command.AddCommand(controller.NewCommand())
 
@@ -66,11 +57,4 @@ func main() {
 		log.Fatal(err)
 		os.Exit(1)
 	}
-
-
-
-
-
-	// +kubebuilder:scaffold:builder
-
 }
